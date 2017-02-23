@@ -1,5 +1,7 @@
 # super-tiny-wave-decoder
 
+[![npm version](https://badge.fury.io/js/super-tiny-wave-decoder.svg)](https://badge.fury.io/js/super-tiny-wave-decoder)
+
 A super tiny WAVE parser and decoder, without any dependencies or unnecessary abstraction layers.
 
 Most of the logic was directly ported from parts of [aurora.js](https://github.com/audiocogs/aurora.js), so lots of ❤️ from here to there!
