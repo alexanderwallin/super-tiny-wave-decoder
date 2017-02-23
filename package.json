@@ -1,6 +1,6 @@
 {
   "name": "super-tiny-wave-decoder",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A super tiny WAVE parser and decoder, without any dependencies or unnecessary abstraction layers",
   "main": "dist/index.js",
   "files": [
