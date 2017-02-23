@@ -29,10 +29,10 @@ export function getWaveHeader(data) {
     )
   }
 
-  const RIFF = readString(view, 0, 4)
+  const RIFF = getString(view, 0, 4)
   const fileSize = view.getUint32(4, true) // Actual file size - 8 bytes
-  const WAVE = readString(view, 8, 4)
-  const fmt = readString(view, 12, 4)
+  const WAVE = getString(view, 8, 4)
+  const fmt = getString(view, 12, 4)
   const formatDataLength = view.getUint32(16, true)
   const formatType = view.getUint16(20, true)
   const numberOfChannels = view.getUint16(22, true)
@@ -40,7 +40,7 @@ export function getWaveHeader(data) {
   const bytesPerSecond = view.getUint32(28, true)
   const blockAlign = view.getUint16(32, true)
   const bitsPerSample = view.getUint16(34, true)
-  // const data = readString(view, 36, 4)
+  // const data = getString(view, 36, 4)
   const dataFileSize = view.getUint32(40, true) // Actual file size - 44 bytes
 
   if (RIFF !== 'RIFF' || WAVE !== 'WAVE' || fmt !== 'fmt ') {
