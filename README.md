@@ -6,6 +6,8 @@ A super tiny WAVE parser and decoder, without any dependencies or unnecessary ab
 
 Most of the logic was directly ported from parts of [aurora.js](https://github.com/audiocogs/aurora.js), so lots of ❤️ from here to there!
 
+**Note:** This is terribly similar to [`wav-decoder`](https://github.com/mohayonao/wav-decoder), which I found after making this. There are some minor differences in the API, but if you're fine with the one in `wav-decoder`, you should probably use that one.
+
 
 ## Why?
 
