@@ -1,10 +1,10 @@
 import { getAsDataView, getString } from './dataview-utils.js'
 
 const WaveFormats = {
-  [0x0001]: 'lpcm',
-  [0x0003]: 'lpcm',
-  [0x0006]: 'alaw',
-  [0x0007]: 'ulaw',
+  0x0001: 'lpcm',
+  0x0003: 'lpcm',
+  0x0006: 'alaw',
+  0x0007: 'ulaw'
 }
 
 /**
@@ -19,13 +19,13 @@ const WaveFormats = {
  * @throws {Error}       The passed data needs to be at least 44 bytes long
  * @throws {Error}       The passed data needs to match the WAVE header spec
  */
-export function getWaveHeader(data) {
+export function getWaveHeader (data) {
   const view = getAsDataView(data)
 
   if (view.byteLength < 44) {
     throw new Error(
-      `The passed data is less than 44 bytes long, which is the length of a WAVE header.`
-      + ` Are you passing the correct piece of data?`
+      `The passed data is less than 44 bytes long, which is the length of a WAVE header.` +
+      ` Are you passing the correct piece of data?`
     )
   }
 
@@ -45,8 +45,8 @@ export function getWaveHeader(data) {
 
   if (RIFF !== 'RIFF' || WAVE !== 'WAVE' || fmt !== 'fmt ') {
     throw new Error(
-      `The passed data does not seem to be the beginning of a WAVE file:`
-      + ` "${RIFF}" should've been "RIFF", "${WAVE}" should've been "WAVE" and "${fmt}" should've been "fmt ".`
+      `The passed data does not seem to be the beginning of a WAVE file:` +
+      ` "${RIFF}" should've been "RIFF", "${WAVE}" should've been "WAVE" and "${fmt}" should've been "fmt ".`
     )
   }
 
@@ -59,7 +59,7 @@ export function getWaveHeader(data) {
     bytesPerSecond,
     blockAlign,
     bitsPerSample,
-    dataFileSize,
+    dataFileSize
   }
 }
 
@@ -69,7 +69,7 @@ export function getWaveHeader(data) {
  * @param  {Object} header A WAVE header object
  * @return {Number}        The duration of the WAVE audio in seconds
  */
-export function getWaveDuration(header) {
+export function getWaveDuration (header) {
   const { bytesPerSecond, dataFileSize } = header
   return dataFileSize / bytesPerSecond
 }
@@ -82,7 +82,7 @@ export function getWaveDuration(header) {
  * @return {Float32Array}        A Float32Array containing decoded audio
  * @throws {Error}               The bit depth passed in header must be 8, 16, 24, 32 or 64
  */
-export function decodeWaveData(header, data) {
+export function decodeWaveData (header, data) {
   const numSamples = data.length / (header.bitsPerSample / 8)
   const isFloatingPoint = header.formatType === 0x0003
   const isLittleEndian = WaveFormats[header.formatType] === 'lpcm'
@@ -109,8 +109,7 @@ export function decodeWaveData(header, data) {
       default:
         throw new Error(`Unsupported bit depth: ${header.bitsPerSample}`)
     }
-  }
-  else {
+  } else {
     switch (header.bitsPerSample) {
       case 8:
         output = new Int8Array(numSamples)

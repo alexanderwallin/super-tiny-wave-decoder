@@ -10,7 +10,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "babel --out-dir dist src",
-    "test": "standard",
+    "lint": "standard src/*.js",
+    "test": "npm run lint",
     "docs": "jsdoc2md -f src/*.js -t docs/README.template.md --partial docs/templates/*.hbs --param-list-format list --heading-depth 3 > README.md"
   },
   "repository": {

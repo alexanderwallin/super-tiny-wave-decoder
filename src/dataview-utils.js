@@ -5,17 +5,14 @@
  * @return {DataView}       A DataView wrapping the passed data
  * @throws {TypeError}      The passed data needs to be of a supported type
  */
-export function getAsDataView(data) {
+export function getAsDataView (data) {
   if (data instanceof DataView) {
     return data
-  }
-  else if (data instanceof ArrayBuffer) {
+  } else if (data instanceof ArrayBuffer) {
     return new DataView(data)
-  }
-  else if ('buffer' in data) {
+  } else if ('buffer' in data) {
     return new DataView(data.buffer)
-  }
-  else {
+  } else {
     throw new TypeError(`Could not convert data of type ${typeof data} into a DataView.`)
   }
 }
@@ -35,10 +32,11 @@ export function getAsDataView(data) {
  * @param  {String} encoding The encoding to parse the text as
  * @return {String}          A string
  */
-export function getString(data, offset, bytes, encoding = 'ascii') {
+export function getString (data, offset, bytes, encoding = 'ascii') {
   let result = ''
 
   const view = getAsDataView(data)
+  let currOffset = offset
 
   switch (encoding.toLowerCase()) {
     case 'ascii':
@@ -47,8 +45,7 @@ export function getString(data, offset, bytes, encoding = 'ascii') {
         const charCode = view.getUint8(offset + i)
         if (charCode >= 0) {
           result += String.fromCharCode(charCode)
-        }
-        else {
+        } else {
           break
         }
       }
@@ -57,8 +54,8 @@ export function getString(data, offset, bytes, encoding = 'ascii') {
 
     case 'utf8':
     case 'utf-8':
-      const nullEnd = length === null ? 0 : -1
-      let currOffset = offset
+      const nullEnd = bytes === null ? 0 : -1
+
       while (currOffset < offset + bytes) {
         const b1 = view.getUint8(currOffset)
 
@@ -69,22 +66,19 @@ export function getString(data, offset, bytes, encoding = 'ascii') {
         if (b1 & 0x80 === 0) {
           result += String.fromCharCode(b1)
           currOffset += 1
-        }
-        // One continuation (128 to 2047)
-        else if (b1 & 0xe0 === 0xc0) {
+        } else if (b1 & 0xe0 === 0xc0) {
+          // One continuation (128 to 2047)
           const b2 = view.getUint8(currOffset + 1)
           result += String.fromCharCode(((b1 & 0x1f) << 6) | b2)
           currOffset += 2
-        }
-        // Two continuation (2048 to 55295 and 57344 to 65535)
-        else if (b1 & 0xf0 === 0xe0) {
+        } else if (b1 & 0xf0 === 0xe0) {
+          // Two continuation (2048 to 55295 and 57344 to 65535)
           const b2 = view.getUint8(currOffset + 1) & 0x3f
           const b3 = view.getUint8(currOffset + 2) & 0x3f
-          result += String.fromCharCode ((b1 & 0x0f) << 12) | (b2 << 6) | b3
+          result += String.fromCharCode((b1 & 0x0f) << 12) | (b2 << 6) | b3
           currOffset += 3
-        }
-        // Three continuation (65536 to 1114111)
-        else if (b1 & 0xf8 === 0xf0) {
+        } else if (b1 & 0xf8 === 0xf0) {
+          // Three continuation (65536 to 1114111)
           const b2 = view.getUint8(currOffset + 1) & 0x3f
           const b3 = view.getUint8(currOffset + 2) & 0x3f
           const b4 = view.getUint8(currOffset + 3) & 0x3f
@@ -103,8 +97,6 @@ export function getString(data, offset, bytes, encoding = 'ascii') {
     case 'utf16-le':
     case 'utf16bom':
     case 'utf16-bom':
-      let currOffset = offset
-
       const bom = view.getUin16(offset)
       if (['utf16bom', 'utf16-bom'].indexOf(encoding) >= 0 && bytes < 2 && bom === nullEnd) {
         return result
@@ -135,8 +127,7 @@ export function getString(data, offset, bytes, encoding = 'ascii') {
 
         if (w1 < 0xd800 || w1 > 0xdfff) {
           result += String.fromCharCode(w1)
-        }
-        else {
+        } else {
           if (w1 > 0xdbff) {
             throw new Error(`Invalid utf16 sequence.`)
           }
