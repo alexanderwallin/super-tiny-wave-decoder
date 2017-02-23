@@ -2,7 +2,9 @@
   "traverse": true,
   "lint": false,
   "test": true,
-  "build": "npm run build",
+  "build": [
+    "npm run build"
+  ],
   "bump": {
     "tag": true,
     "commit": true,
