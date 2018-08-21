@@ -45,7 +45,7 @@ const decodedAudio = decodeWaveData(audioDataChunk, header)
 ```
 
 
-## API
+## API
 
 ### Functions
 
